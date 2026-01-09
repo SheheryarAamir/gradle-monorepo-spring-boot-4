@@ -1,0 +1,83 @@
+services:
+  # Loki in Monolithic mode (all-in-one)
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: "-config.file=/etc/loki/local-config.yaml"
+    networks:
+      - backend
+
+  # Alloy as your "Everything Collector"
+  alloy:
+    image: grafana/alloy:latest
+    volumes:
+      - ./observability/alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: run --server.http.listen-addr=0.0.0.0:12345 /etc/alloy/config.alloy
+    ports:
+      - "12345:12345"
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP (Spring Boot 4 sends here)
+    networks:
+      - backend
+
+  tempo:
+    image: grafana/tempo:latest
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - tempo-data:/var/tempo
+      - type: bind
+        source: ./observability/tempo/tempo.yaml
+        target: /etc/tempo.yaml
+        read_only: true
+    ports:
+      - "3200:3200" # For Grafana to Query
+    networks:
+      - backend
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        /run.sh
+    ports:
+      - "3000:3000"
+    volumes:
+      - type: bind
+        source: ./observability/grafana/datasource.yaml
+        target: /etc/grafana/provisioning/datasources/datasource.yaml
+        read_only: true
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--web.enable-remote-write-receiver' # REQUIRED for Alloy to push data
+      - '--enable-feature=otlp-write-receiver' # Optional: future-proofing for OTLP
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+    networks:
+      - backend
+volumes:
+  tempo-data:
+
+networks:
+  backend:
+    driver: "bridge"

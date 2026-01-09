@@ -1,0 +1,34 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    uid: prometheus
+    url: http://prometheus:9090
+    jsonData:
+      httpMethod: POST
+      exemplarsRepo:
+        datasourceUid: tempo # Links spikes in graphs to traces
+
+  - name: Loki
+    type: loki
+    uid: loki
+    url: http://loki:3100
+    jsonData:
+      httpHeaderName1: "X-Scope-OrgID"
+      derivedFields:
+        - datasourceUid: tempo
+          name: TraceID
+          matcherRegex: '"traceid":"([a-f0-9]{32})"'
+          url: '$${__value.raw}'
+          urlDisplayLabel: "View Trace"
+
+  - name: Tempo
+    type: tempo
+    uid: tempo
+    url: http://tempo:3200
+    jsonData:
+      nodeGraph:
+        enabled: true
+      tracesToLogs:
+        datasourceUid: loki # Links traces back to logs

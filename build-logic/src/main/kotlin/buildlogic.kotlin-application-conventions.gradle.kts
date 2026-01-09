@@ -23,6 +23,7 @@ tasks.withType<BootJar>().configureEach {
     // This produces "app-service.jar" for :app-service
     archiveFileName.set("${project.name}.jar")
 }
+val dockerComposePath = "/usr/local/bin/docker"
 
 tasks.register<Exec>("dockerStop") {
     group = "docker"
@@ -31,7 +32,7 @@ tasks.register<Exec>("dockerStop") {
     isIgnoreExitValue = true
 
     // 2. Use 'rm -f' which forces removal and is quieter
-    executable = "/usr/local/bin/docker"
+    executable = dockerComposePath
 
     args(
         "rm",
@@ -47,7 +48,7 @@ tasks.register<Exec>("dockerBuild") {
 
     // Explicitly set the path to the docker executable
     // This bypasses the PATH search that is currently failing
-    executable = "/usr/local/bin/docker"
+    executable = dockerComposePath
 
     args(
         "build",
@@ -64,7 +65,7 @@ tasks.register<Exec>("dockerRun"){
     group = "docker"
     description = "Runs the docker image for the service"
 
-    executable = "/usr/local/bin/docker"
+    executable = dockerComposePath
 
     args(
         "run", "-d",
@@ -98,4 +99,35 @@ tasks.register("dockerBuildAndRun") {
      *         }
      *     }
      */
+}
+
+
+
+
+tasks.register<Exec>("dockerComposeUp") {
+    group = "docker"
+    //dependsOn("dockerBuild")
+    workingDir = project.rootDir
+
+    executable = dockerComposePath // Directly point to the binary
+    args(
+        "compose",
+        "--project-directory", project.rootDir.absolutePath, // Forces root context
+        "-f", "docker-compose.infra.yaml",
+        "-f", "${project.name}/docker-compose.yaml",
+        "up", "-d"
+    )
+}
+
+tasks.register<Exec>("dockerComposeDown") {
+    group = "docker"
+    workingDir = project.rootDir
+
+    executable = dockerComposePath
+    args(
+        "compose", "--project-directory", project.rootDir.absolutePath, // Forces root context
+        "-f", "docker-compose.infra.yaml",
+        "-f", "${project.name}/docker-compose.yaml",
+        "down"
+    )
 }
