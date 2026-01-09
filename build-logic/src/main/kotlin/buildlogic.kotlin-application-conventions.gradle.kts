@@ -31,11 +31,18 @@ tasks.register<Exec>("dockerStop") {
     isIgnoreExitValue = true
 
     // 2. Use 'rm -f' which forces removal and is quieter
-    commandLine("sh", "-c", "docker rm -f ${project.name} > /dev/null 2>&1 || true")
+    executable = "/usr/local/bin/docker"
+
+    args(
+        "rm",
+        "-f", "${project.name}"
+    )
+    //commandLine("sh", "-c", "docker rm -f ${project.name} > /dev/null 2>&1 || true")
 }
 
 tasks.register<Exec>("dockerBuild") {
     group = "docker"
+    dependsOn("dockerStop")
     dependsOn("bootJar")
 
     // Explicitly set the path to the docker executable
@@ -56,12 +63,21 @@ tasks.register<Exec>("dockerBuild") {
 tasks.register<Exec>("dockerRun"){
     group = "docker"
     description = "Runs the docker image for the service"
-    commandLine(
+
+    executable = "/usr/local/bin/docker"
+
+    args(
+        "run", "-d",
+        "--name", project.name,
+        "-p", "8080:8080",
+        "${project.name}:latest",
+    )
+    /*commandLine(
         "docker", "run", "-d",
         "--name", project.name,
         "-p", "8080:8080",
         "${project.name}:latest"
-    )
+    )*/
 }
 
 tasks.register("dockerBuildAndRun") {
