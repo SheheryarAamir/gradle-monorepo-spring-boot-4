@@ -10,20 +10,24 @@ repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
-
+val libs = the<VersionCatalogsExtension>().named("libs")
 dependencies {
-    constraints {
-        // Define dependency versions as constraints
-        implementation("org.apache.commons:commons-text:1.13.0")
-    }
+
+    implementation(libs.findLibrary("spring-boot-starter-web").get())
+    implementation(libs.findLibrary("spring-boot-starter-actuator").get())
+    implementation(libs.findLibrary("kotlinx-coroutines-core").get())
+    implementation(libs.findLibrary("kotlinx-coroutines-reactor").get())
+    implementation(libs.findLibrary("spring-starter-test").get())
 }
 
 testing {
     suites {
-        // Configure the built-in test suite
         val test by getting(JvmTestSuite::class) {
-            // Use JUnit Jupiter test framework
-            useJUnitJupiter("5.12.1")
+            useJUnitJupiter()
+            dependencies {
+                // If the 'libs' accessor is still not resolving, use the findLibrary method:
+                implementation(libs.findLibrary("spring-starter-test").get())
+            }
         }
     }
 }

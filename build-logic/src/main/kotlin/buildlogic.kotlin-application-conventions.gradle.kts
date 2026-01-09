@@ -3,11 +3,83 @@
  *
  * This project uses @Incubating APIs which are subject to change.
  */
-
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+import java.io.OutputStream
 plugins {
     // Apply the common convention plugin for shared build configuration between library and application projects.
     id("buildlogic.kotlin-common-conventions")
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+}
+
+tasks.withType<BootJar>().configureEach {
+    // Enable layering globally for all boot projects
+    layered {
+        enabled.set(true)
+    }
+
+    // Convention: Default the JAR name to the project folder name
+    // This produces "app-service.jar" for :app-service
+    archiveFileName.set("${project.name}.jar")
+}
+
+tasks.register<Exec>("dockerStop") {
+    group = "docker"
+
+    // 1. This prevents Gradle from crashing if Docker returns an error
+    isIgnoreExitValue = true
+
+    // 2. Use 'rm -f' which forces removal and is quieter
+    commandLine("sh", "-c", "docker rm -f ${project.name} > /dev/null 2>&1 || true")
+}
+
+tasks.register<Exec>("dockerBuild") {
+    group = "docker"
+    dependsOn("bootJar")
+
+    // Explicitly set the path to the docker executable
+    // This bypasses the PATH search that is currently failing
+    executable = "/usr/local/bin/docker"
+
+    args(
+        "build",
+        "-t", "${project.name}:latest",
+        "-f", "${project.name}/Dockerfile",
+        "."
+    )
+
+    // Ensure we are running from the root of the Monorepo
+    workingDir = project.rootDir
+}
+
+tasks.register<Exec>("dockerRun"){
+    group = "docker"
+    description = "Runs the docker image for the service"
+    commandLine(
+        "docker", "run", "-d",
+        "--name", project.name,
+        "-p", "8080:8080",
+        "${project.name}:latest"
+    )
+}
+
+tasks.register("dockerBuildAndRun") {
+    group = "docker"
+    description = "Builds the JAR, builds the image, and starts the container."
+
+    // This creates the chain: Run -> Build -> BootJar
+    dependsOn("dockerBuild")
+
+    // After dockerBuild finishes, we execute the run logic
+    finalizedBy("dockerRun")
+
+    /**
+     * doLast {
+     *         // We can manually trigger the run here if we want more control
+     *         project.exec {
+     *             commandLine("docker", "run", "--rm", "-p", "8080:8080", "${project.name}:latest")
+     *         }
+     *     }
+     */
 }
