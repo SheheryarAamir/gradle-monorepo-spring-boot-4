@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.findLibrary("kotlinx-coroutines-core").get())
     implementation(libs.findLibrary("kotlinx-coroutines-reactor").get())
     implementation(libs.findLibrary("spring-starter-test").get())
+    implementation(libs.findLibrary("kotlin-logging").get())
 }
 
 testing {

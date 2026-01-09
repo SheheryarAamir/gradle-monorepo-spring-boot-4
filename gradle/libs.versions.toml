@@ -4,6 +4,7 @@ kotlin = "2.3.0"
 springBoot = "4.0.1"
 # Kotlinx Coroutines latest stable
 kotlinxCoroutines = "1.10.2"
+kotlinLogging = "7.0.0"
 
 [libraries]
 # Spring Boot Starters
@@ -13,6 +14,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kotlin-spring-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-allopen", version.ref = "kotlin" }
 spring-boot-gradle-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springBoot" }
 spring-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlinLogging" }
 
 # Kotlin Coroutines
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }

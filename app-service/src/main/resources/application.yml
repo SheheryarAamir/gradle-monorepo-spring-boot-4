@@ -1,3 +1,10 @@
 spring:
   application:
     name: app-service
+
+logging:
+  structured:
+    format:
+      console: "logstash"
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - [%X{traceId}] - %msg %kvp%n"
