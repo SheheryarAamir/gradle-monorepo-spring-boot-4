@@ -21,4 +21,4 @@ kotlinx-coroutines-reactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 [plugins]
 # If you are using the Spring Boot plugin in your build-logic
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version = "kotlin" }
+2.3.0-jvm = { id = "org.jetbrains.2.3.0.jvm", version = "2.3.0" }
