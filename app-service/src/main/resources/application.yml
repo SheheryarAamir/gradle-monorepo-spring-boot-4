@@ -1,10 +1,33 @@
+server:
+  port: 8080
 spring:
   application:
     name: app-service
 
-logging:
-  structured:
-    format:
-      console: "logstash"
-  pattern:
-    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - [%X{traceId}] - %msg %kvp%n"
+#logging:
+#  structured:
+#    format:
+#      console: "logstash"
+#  pattern:
+#    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - [%X{traceId}] - %msg %kvp%n"
+
+management:
+  opentelemetry:
+    # This is the primary block for Spring Boot 4.0.1
+    logging:
+      export:
+        otlp:
+          endpoint: http://alloy:4318/v1/logs
+    tracing:
+      export:
+        otlp:
+          endpoint: http://alloy:4318/v1/traces
+  otlp:
+    metrics:
+      export:
+        url: http://alloy:4318/v1/metrics
+        step: 10s
+  tracing:
+    sampling:
+      probability: 1.0
+

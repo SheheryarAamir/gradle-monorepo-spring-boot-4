@@ -1,0 +1,13 @@
+services:
+  app-service:
+    build:
+      context: ..
+      dockerfile: app-service/Dockerfile
+    image: app-service:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+
+networks:
+  backend:

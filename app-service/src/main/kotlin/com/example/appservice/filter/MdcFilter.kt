@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import java.util.UUID
 
-@Component
+
 class MdcFilter : OncePerRequestFilter() {
     companion object {
         private const val TRACE_ID_KEY = "traceId"

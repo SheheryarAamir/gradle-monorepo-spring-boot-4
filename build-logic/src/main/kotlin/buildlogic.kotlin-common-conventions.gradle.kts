@@ -19,6 +19,11 @@ dependencies {
     implementation(libs.findLibrary("kotlinx-coroutines-reactor").get())
     implementation(libs.findLibrary("spring-starter-test").get())
     implementation(libs.findLibrary("kotlin-logging").get())
+    implementation(libs.findLibrary("spring-boot-starter-otel").get())
+    implementation(libs.findLibrary("otel-logback-appender").get())
+    implementation(libs.findLibrary("micrometer-tracing-bridge-otel").get())
+    implementation(libs.findLibrary("opentelemetry-exporter-otlp").get())
+    //implementation(libs.findLibrary("otel-logback-mdc").get())
 }
 
 testing {
