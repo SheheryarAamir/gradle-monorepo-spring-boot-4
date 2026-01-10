@@ -4,6 +4,9 @@ services:
       context: ..
       dockerfile: app-service/Dockerfile
     image: app-service:latest
+    environment:
+      - OTEL_SERVICE_NAME=app-service
+      - OTEL_INSTRUMENTATION_COMMON_PEER_SERVICE_MAPPING=jsonplaceholder.typicode.com=JSONPlaceholder
     ports:
       - "8080:8080"
     networks:

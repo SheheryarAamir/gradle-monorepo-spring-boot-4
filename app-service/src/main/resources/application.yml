@@ -4,14 +4,16 @@ spring:
   application:
     name: app-service
 
-#logging:
-#  structured:
-#    format:
-#      console: "logstash"
-#  pattern:
-#    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - [%X{traceId}] - %msg %kvp%n"
+logging:
+  structured:
+    format:
+      console: "logstash"
 
 management:
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.client.requests: true
   opentelemetry:
     # This is the primary block for Spring Boot 4.0.1
     logging:
@@ -30,4 +32,11 @@ management:
   tracing:
     sampling:
       probability: 1.0
+  observations:
+    http:
+      client:
+        requests:
+          enabled: true
+    annotations:
+      enabled: true
 

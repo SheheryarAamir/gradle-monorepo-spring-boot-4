@@ -4,8 +4,60 @@ otelcol.receiver.otlp "spring_boot" {
   
   output {
     metrics = [otelcol.exporter.prometheus.to_prom.input]
-    traces  = [otelcol.exporter.otlp.to_tempo.input]
     logs    = [otelcol.exporter.loki.to_loki.input]
+    traces  = [
+          otelcol.exporter.otlp.to_tempo.input,
+          otelcol.connector.spanmetrics.apm_metrics.input,
+		  otelcol.processor.attributes.identify_external_calls.input,
+        ]
+  }
+}
+
+// THE APM ENGINE: Generates RED metrics from Traces
+otelcol.connector.spanmetrics "apm_metrics" {
+  histogram {
+    unit = "ms"
+    // The "explicit" block is required to define custom buckets
+    explicit {
+      buckets = ["1ms", "10ms", "100ms", "1s", "10s"]
+    }
+  }
+
+  // Dimensions for the Service Graph and filtering
+  dimension { name = "service.name" }
+  dimension { name = "server.address" }
+  dimension { name = "span.kind" }
+  dimension { name = "status.code" }
+  dimension { name = "http.method" }
+  dimension { name = "http.status_code" }
+
+  output {
+    metrics = [otelcol.exporter.prometheus.to_prom.input]
+  }
+}
+
+otelcol.connector.servicegraph "apm_graph" {
+  dimensions = ["http.method", "http.status_code", "server.address", "span.kind"]
+
+  output {
+    metrics = [otelcol.exporter.prometheus.to_prom.input]
+  }
+}
+
+otelcol.processor.attributes "identify_external_calls" {
+  action {
+    key = "peer.service"
+    value = "JSONPlaceholder" // Hardcode for testing, or use from_attribute
+    action = "upsert"
+  }
+  action {
+    key = "server.address"
+    from_attribute = "peer.service"
+    action = "insert"
+  }
+
+  output {
+    traces = [otelcol.connector.servicegraph.apm_graph.input]
   }
 }
 
