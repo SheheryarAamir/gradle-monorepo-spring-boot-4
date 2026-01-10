@@ -5,11 +5,42 @@ otelcol.receiver.otlp "spring_boot" {
   output {
     metrics = [otelcol.exporter.prometheus.to_prom.input]
     logs    = [otelcol.exporter.loki.to_loki.input]
-    traces  = [
-          otelcol.exporter.otlp.to_tempo.input,
-          otelcol.connector.spanmetrics.apm_metrics.input,
-		  otelcol.processor.attributes.identify_external_calls.input,
-        ]
+    traces  = [otelcol.processor.transform.identify_external_calls.input]
+  }
+}
+
+otelcol.processor.transform "identify_external_calls" {
+  error_mode = "ignore"
+
+  trace_statements {
+    context = "span"
+    statements = [
+      // Set peer.service from server.address for CLIENT spans (kind == 3)
+      `set(attributes["peer.service"], attributes["server.address"]) where kind == 3 and attributes["server.address"] != nil and attributes["peer.service"] == nil`,
+
+      // Fallback to url.full host for HTTP calls
+      `set(attributes["peer.service"], attributes["url.full"]) where kind == 3 and attributes["url.full"] != nil and attributes["peer.service"] == nil`,
+
+      // Fallback to http.url for older instrumentation
+      `set(attributes["peer.service"], attributes["http.url"]) where kind == 3 and attributes["http.url"] != nil and attributes["peer.service"] == nil`,
+
+      // Fallback to net.peer.name for network calls
+      `set(attributes["peer.service"], attributes["net.peer.name"]) where kind == 3 and attributes["net.peer.name"] != nil and attributes["peer.service"] == nil`,
+
+      // Fallback to db.name for database calls
+      `set(attributes["peer.service"], attributes["db.name"]) where kind == 3 and attributes["db.name"] != nil and attributes["peer.service"] == nil`,
+
+      // Set default if still not set
+      `set(attributes["peer.service"], "unknown-external") where kind == 3 and attributes["peer.service"] == nil`,
+    ]
+  }
+
+  output {
+    traces = [
+      otelcol.connector.spanmetrics.apm_metrics.input,
+      otelcol.connector.servicegraph.apm_graph.input,
+      otelcol.exporter.otlp.to_tempo.input,
+    ]
   }
 }
 
@@ -25,6 +56,7 @@ otelcol.connector.spanmetrics "apm_metrics" {
 
   // Dimensions for the Service Graph and filtering
   dimension { name = "service.name" }
+  dimension { name = "peer.service" }
   dimension { name = "server.address" }
   dimension { name = "span.kind" }
   dimension { name = "status.code" }
@@ -37,27 +69,16 @@ otelcol.connector.spanmetrics "apm_metrics" {
 }
 
 otelcol.connector.servicegraph "apm_graph" {
-  dimensions = ["http.method", "http.status_code", "server.address", "span.kind"]
+  dimensions = [
+    "peer.service",
+    "http.method",
+    "http.status_code",
+    "server.address",
+    "span.kind",
+  ]
 
   output {
     metrics = [otelcol.exporter.prometheus.to_prom.input]
-  }
-}
-
-otelcol.processor.attributes "identify_external_calls" {
-  action {
-    key = "peer.service"
-    value = "JSONPlaceholder" // Hardcode for testing, or use from_attribute
-    action = "upsert"
-  }
-  action {
-    key = "server.address"
-    from_attribute = "peer.service"
-    action = "insert"
-  }
-
-  output {
-    traces = [otelcol.connector.servicegraph.apm_graph.input]
   }
 }
 
