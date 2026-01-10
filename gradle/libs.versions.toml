@@ -1,8 +1,6 @@
 [versions]
 kotlin = "2.3.0"
-# Spring Boot 4.0.1 is the latest stable release for 2026
 springBoot = "4.0.1"
-# Kotlinx Coroutines latest stable
 kotlinxCoroutines = "1.10.2"
 kotlinLogging = "7.0.0"
 otel-instrumentation = "2.23.0-alpha"
@@ -11,19 +9,18 @@ otel-instrumentation = "2.23.0-alpha"
 # Spring Boot Starters
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "springBoot" }
 spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator", version.ref = "springBoot" }
-# New dedicated OTel starter (Modularized in SB4)
+spring-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-otel = { module = "org.springframework.boot:spring-boot-starter-opentelemetry" }
-# Required for log aggregation via OTLP in SB 4.0.1
+spring-boot-starter-restclient = { module = "org.springframework.boot:spring-boot-starter-restclient" }
+spring-boot-starter-aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
+
 otel-logback-appender = { module = "io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0", version.ref = "otel-instrumentation" }
 # The bridge that turns Spring Observations into OTel Spans
 micrometer-tracing-bridge-otel = { module = "io.micrometer:micrometer-tracing-bridge-otel", version="1.6.1"}
 # The exporter for OTLP traces (often needed alongside the bridge)
 opentelemetry-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporter-otlp", version="1.57.0" }
-
-spring-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlinLogging" }
-spring-boot-starter-restclient = { module = "org.springframework.boot:spring-boot-starter-restclient" }
-spring-boot-starter-aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
+
 
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-spring-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-allopen", version.ref = "kotlin" }
@@ -34,6 +31,5 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-coroutines-reactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version.ref = "kotlinxCoroutines" }
 
 [plugins]
-# If you are using the Spring Boot plugin in your build-logic
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
