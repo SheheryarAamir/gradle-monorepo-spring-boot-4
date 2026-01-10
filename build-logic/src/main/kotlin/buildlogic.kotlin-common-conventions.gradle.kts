@@ -23,7 +23,9 @@ dependencies {
     implementation(libs.findLibrary("otel-logback-appender").get())
     implementation(libs.findLibrary("micrometer-tracing-bridge-otel").get())
     implementation(libs.findLibrary("opentelemetry-exporter-otlp").get())
-    //implementation(libs.findLibrary("otel-logback-mdc").get())
+    implementation(libs.findLibrary("spring-boot-starter-aspectj").get())
+    implementation(libs.findLibrary("spring-boot-starter-restclient").get())
+
 }
 
 testing {

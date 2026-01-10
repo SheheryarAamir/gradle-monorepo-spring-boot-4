@@ -30,5 +30,11 @@ datasources:
     jsonData:
       nodeGraph:
         enabled: true
+      serviceMap:
+        datasourceUid: prometheus
       tracesToLogs:
         datasourceUid: loki # Links traces back to logs
+        tags: [ 'job', 'instance', 'service.name' ] # Common tags to match logs
+        filterBySpanID: false
+        filterByTraceID: true
+        mapTagNamesEnabled: true
