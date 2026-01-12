@@ -4,19 +4,14 @@ spring:
   application:
     name: app-service
 
+  h2:
+    console:
+      enabled: true
   datasource:
-    url: jdbc:mysql://mysql:3306/appservice
-    username: root
-    password: root
-    hikari:
-      # Connection Pool Settings
-      pool-name: appservice                    # Name shown in metrics/logs
-      minimum-idle: 5                          # Minimum number of idle connections
-      maximum-pool-size: 20                    # Maximum pool size
-      max-lifetime: 1800000                    # Max lifetime of connection (30 min in ms)
-      connection-timeout: 30000                # Timeout to get connection (30 sec)
-      idle-timeout: 600000                     # Max idle time (10 min)
-
+    url: jdbc:h2:mem:appservice;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
 
   sql:
     init:
@@ -26,11 +21,6 @@ logging:
   structured:
     format:
       console: "logstash"
-
-otel:
-  instrumentation:
-    jdbc:
-      enabled: true
 
 management:
   metrics:

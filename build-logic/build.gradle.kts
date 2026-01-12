@@ -20,5 +20,7 @@ dependencies {
 
     // Also add Kotlin if you use Kotlin-specific tasks in your conventions
     implementation(libs.kotlin.gradle.plugin)
-    implementation(libs.kotlin.spring.gradle.plugin)
+    implementation(libs.kotlin.allopen)
+    implementation(libs.spring.dependency.management.plugin)
+    implementation(libs.graalvm.gradle.plugin)
 }

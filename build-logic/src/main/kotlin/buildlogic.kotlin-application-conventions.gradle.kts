@@ -4,7 +4,8 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import java.io.OutputStream
+import org.springframework.boot.gradle.tasks.run.BootRun
+
 plugins {
     // Apply the common convention plugin for shared build configuration between library and application projects.
     id("buildlogic.kotlin-common-conventions")
@@ -14,15 +15,14 @@ plugins {
 }
 
 tasks.withType<BootJar>().configureEach {
-    // Enable layering globally for all boot projects
     layered {
         enabled.set(true)
     }
-
     // Convention: Default the JAR name to the project folder name
     // This produces "app-service.jar" for :app-service
     archiveFileName.set("${project.name}.jar")
 }
+
 val dockerComposePath = "/usr/local/bin/docker"
 
 tasks.register<Exec>("dockerStop") {
@@ -44,7 +44,6 @@ tasks.register<Exec>("dockerStop") {
 tasks.register<Exec>("dockerBuild") {
     group = "docker"
     dependsOn("dockerStop")
-    dependsOn("bootJar")
 
     // Explicitly set the path to the docker executable
     // This bypasses the PATH search that is currently failing
@@ -115,7 +114,7 @@ tasks.register<Exec>("dockerComposeUp") {
         "--project-directory", project.rootDir.absolutePath, // Forces root context
         "-f", "docker-compose.infra.yaml",
         "-f", "${project.name}/docker-compose.yaml",
-        "up", "-d"
+        "up", "--build", "-d"
     )
 }
 

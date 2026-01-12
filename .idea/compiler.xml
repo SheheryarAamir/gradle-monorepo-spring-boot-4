@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.6" />
+    <bytecodeTargetLevel target="1.6">
+      <module name="kotlin-monorepo.app-service.aot" target="25" />
+      <module name="kotlin-monorepo.app-service.aotTest" target="25" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="kotlin-monorepo.app-service" options="-parameters" />
+      <module name="kotlin-monorepo.app-service.aot" options="-parameters" />
+      <module name="kotlin-monorepo.app-service.aotTest" options="-parameters" />
       <module name="kotlin-monorepo.app-service.main" options="-parameters" />
       <module name="kotlin-monorepo.app-service.test" options="-parameters" />
     </option>

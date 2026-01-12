@@ -1,0 +1,9 @@
+.git
+.gradle
+**/build
+**/target
+**/.idea
+**/.vscode
+**/node_modules
+**/*.log
+.DS_Store

@@ -1,48 +1,50 @@
-# --- Stage 1: Build Stage (Construction Site) ---
-# Using the latest JDK 25 Alpine image available in Jan 2026
-FROM eclipse-temurin:25-jdk-alpine AS builder
-
-# Essential for Gradle/Kotlin 2.3 performance on Alpine's musl
+# --- Stage 1: Build ---
+FROM eclipse-temurin:25-jdk-alpine AS dependencies
+WORKDIR /builder
 RUN apk add --no-cache libc6-compat
 
+COPY gradlew .
+COPY gradle gradle
+COPY build-logic build-logic
+COPY settings.gradle.kts .
+COPY build.gradle.kts .
+COPY app-service app-service
+
+RUN chmod +x gradlew && \
+    ./gradlew dependencies --no-daemon || true
+
+# Stage 2 - application changes
+FROM dependencies AS builder
 WORKDIR /builder
 
-# 1. Copy Gradle wrapper and structure
-COPY gradlew .
-COPY gradle/ gradle/
-COPY build-logic/ build-logic/
-COPY settings.gradle.kts .
-COPY gradle.properties .
-COPY gradle/libs.versions.toml gradle/
+# Now copy source code
+COPY app-service app-service
 
-# 2. Fix permissions and line endings (Crucial for Windows/Mac to Alpine)
-RUN chmod +x gradlew && \
-    sed -i 's/\r$//' gradlew
-
-# 3. Copy app-service module
-COPY app-service/ app-service/
-
-# 4. Build the JAR using JDK 25
-# Note: Ensure your gradle-wrapper is 9.2+ for JDK 25 support
+# Build the application
 RUN ./gradlew :app-service:bootJar -x test --no-daemon
 
-# --- Stage 2: Tiny Runtime Stage (Gallery) ---
-# Switch to the lean JRE 25 to keep the image under 130MB
+# --- Stage 3: Extract Layers ---
+# This stage breaks the fat JAR into optimized folders
+FROM eclipse-temurin:25-jre-alpine AS extractor
+WORKDIR /app
+COPY --from=builder /builder/app-service/build/libs/app-service.jar app.jar
+RUN java -Djarmode=layertools -jar app.jar extract
+
+# --- Stage 4: Runtime ---
 FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 
-# Security: Create and use a non-root user
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 
-# Copy the built jar from the builder stage
-COPY --from=builder /builder/app-service/build/libs/app-service.jar app.jar
+# Copy each layer individually for maximum Docker cache hits
+COPY --from=extractor /app/dependencies/ ./
+COPY --from=extractor /app/spring-boot-loader/ ./
+COPY --from=extractor /app/snapshot-dependencies/ ./
+COPY --from=extractor /app/application/ ./
 
-# Expose Spring's default port
-EXPOSE 8080
-
-# Optimization flags for JDK 25 in containers
+# AOT classes generated in Stage 1 are inside the 'application' layer now
 ENTRYPOINT ["java", \
             "-XX:+UseContainerSupport", \
             "-XX:MaxRAMPercentage=75.0", \
-            "-jar", "app.jar"]
+            "org.springframework.boot.loader.launch.JarLauncher"]
