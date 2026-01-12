@@ -6,9 +6,9 @@ CREATE TABLE IF NOT EXISTS `users`(
     `created_at` TIMESTAMP NOT NULL,
     `created_by` varchar(20) NOT NULL,
     `updated_at` TIMESTAMP DEFAULT NULL,
-    `updated_by` varchar(20) NULL
+    `updated_by` varchar(20) NULL,
+    INDEX idx_users_email (email)
     );
-CREATE INDEX idx_users_email ON users(email);
 
 CREATE TABLE IF NOT EXISTS posts (
    `id`int AUTO_INCREMENT PRIMARY KEY,
@@ -19,10 +19,7 @@ CREATE TABLE IF NOT EXISTS posts (
    `created_by` varchar(20) NOT NULL,
    `updated_at` TIMESTAMP DEFAULT NULL,
    `updated_by` varchar(20) NULL,
-   CONSTRAINT fk_user
-       FOREIGN KEY(users_id)
-           REFERENCES users(id)
-           ON DELETE CASCADE
+    CONSTRAINT fk_user FOREIGN KEY(users_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_posts_users_id (users_id),
+    INDEX idx_posts_title (title)
 );
-CREATE INDEX idx_posts_users_id ON posts(users_id);
-CREATE INDEX idx_posts_title ON posts(title);

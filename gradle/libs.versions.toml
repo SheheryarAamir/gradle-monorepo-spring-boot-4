@@ -19,8 +19,11 @@ spring-boot-starter-otel = { module = "org.springframework.boot:spring-boot-star
 spring-boot-starter-restclient = { module = "org.springframework.boot:spring-boot-starter-restclient" }
 spring-boot-starter-aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc" }
+spring-boot-kafka = { module = "org.springframework.boot:spring-boot-kafka" }
 spring-boot-h2 = { module = "org.springframework.boot:spring-boot-h2console" }
 spring-boot-starter-jdbc-test = { module = "org.springframework.boot:spring-boot-starter-data-jdbc-test" }
+spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 
 spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "com.diffplug.spotless.gradle.plugin", version.ref = "spotless" }
 

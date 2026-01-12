@@ -22,6 +22,11 @@ dependencies {
     implementation(libs.findLibrary("mysql-connector").get())
     implementation(libs.findLibrary("datasource-micrometer").get())
 
+    implementation(libs.findLibrary("spring-kafka").get())
+    implementation(libs.findLibrary("spring-boot-kafka").get())
+    implementation(libs.findLibrary("jackson-module-kotlin").get())
+
+
     implementation(libs.findLibrary("spring-boot-starter-otel").get())
     implementation(libs.findLibrary("otel-logback-appender").get())
     implementation(libs.findLibrary("micrometer-tracing-bridge-otel").get())

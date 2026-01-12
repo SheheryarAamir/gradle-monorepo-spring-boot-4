@@ -4,12 +4,11 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import io.micrometer.observation.annotation.Observed
 import org.springframework.stereotype.Service
 
-private val logger = KotlinLogging.logger {}
-
 @Service
 class AppService(
     private val postService: PostService,
 ) {
+    private val logger = KotlinLogging.logger {}
     @Observed(name = "get-service-info")
     fun getInfo() {
         postService.getPosts()
