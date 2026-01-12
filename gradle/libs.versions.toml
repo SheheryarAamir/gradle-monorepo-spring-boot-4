@@ -4,15 +4,25 @@ springBoot = "4.0.1"
 kotlinxCoroutines = "1.10.2"
 kotlinLogging = "7.0.0"
 otel-instrumentation = "2.23.0-alpha"
+springDependencyManagement = "1.1.7"
+mysql = "9.1.0"
+datasource-micrometer-spring = "2.0.1"
 
 [libraries]
 # Spring Boot Starters
-spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "springBoot" }
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc", version.ref = "springBoot" }
+spring-boot-starter-web-test = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc-test", version.ref = "springBoot" }
 spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator", version.ref = "springBoot" }
 spring-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-otel = { module = "org.springframework.boot:spring-boot-starter-opentelemetry" }
 spring-boot-starter-restclient = { module = "org.springframework.boot:spring-boot-starter-restclient" }
 spring-boot-starter-aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
+spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc" }
+spring-boot-h2 = { module = "org.springframework.boot:spring-boot-h2console" }
+spring-boot-starter-jdbc-test = { module = "org.springframework.boot:spring-boot-starter-data-jdbc-test" }
+
+mysql-connector = { group = "com.mysql", name = "mysql-connector-j", version.ref = "mysql" }
+datasource-micrometer = { group = "net.ttddyy.observation", name="datasource-micrometer-spring-boot", version.ref="datasource-micrometer-spring"}
 
 otel-logback-appender = { module = "io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0", version.ref = "otel-instrumentation" }
 # The bridge that turns Spring Observations into OTel Spans
@@ -20,16 +30,21 @@ micrometer-tracing-bridge-otel = { module = "io.micrometer:micrometer-tracing-br
 # The exporter for OTLP traces (often needed alongside the bridge)
 opentelemetry-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporter-otlp", version="1.57.0" }
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlinLogging" }
-
-
-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlin-spring-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-allopen", version.ref = "kotlin" }
-spring-boot-gradle-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springBoot" }
+kotlin-reflect = {group = "org.jetbrains.kotlin", name ="kotlin-reflect", version.ref = "kotlin"}
 
 # Kotlin Coroutines
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-reactor = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactor", version.ref = "kotlinxCoroutines" }
 
+# Gradle plugins as dependencies (for build-logic)
+spring-boot-gradle-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springBoot" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-allopen = { module = "org.jetbrains.kotlin:kotlin-allopen", version.ref = "kotlin" }
+spring-dependency-management-plugin = { module = "io.spring.gradle:dependency-management-plugin", version.ref = "springDependencyManagement" }
+graalvm-gradle-plugin = { module = "org.graalvm.buildtools:native-gradle-plugin", version = "0.11.3" }
+
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }

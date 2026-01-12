@@ -15,7 +15,13 @@ otelcol.processor.transform "identify_external_calls" {
   trace_statements {
     context = "span"
     statements = [
-      // Set peer.service from server.address for CLIENT spans (kind == 3)
+	  // JDBC spans: Use jdbc.datasource.name attribute
+      `set(attributes["peer.service"], Concat(["mysql-", attributes["jdbc.datasource.name"]], "")) where attributes["jdbc.datasource.name"] != nil`,
+
+      // Primary: Use client.name for CLIENT spans (this is what your app uses!)
+      `set(attributes["peer.service"], attributes["client.name"]) where kind == 3 and attributes["client.name"] != nil and attributes["peer.service"] == nil`,
+
+      // Fallback to server.address
       `set(attributes["peer.service"], attributes["server.address"]) where kind == 3 and attributes["server.address"] != nil and attributes["peer.service"] == nil`,
 
       // Fallback to url.full host for HTTP calls
