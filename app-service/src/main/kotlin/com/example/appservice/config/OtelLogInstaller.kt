@@ -6,7 +6,9 @@ import org.springframework.beans.factory.InitializingBean
 import org.springframework.stereotype.Component
 
 @Component
-class OtelLogInstaller(private val openTelemetry: OpenTelemetry) : InitializingBean {
+class OtelLogInstaller(
+    private val openTelemetry: OpenTelemetry,
+) : InitializingBean {
     override fun afterPropertiesSet() {
         // This links the Logback appender to the Spring-managed OTel SDK
         OpenTelemetryAppender.install(openTelemetry)

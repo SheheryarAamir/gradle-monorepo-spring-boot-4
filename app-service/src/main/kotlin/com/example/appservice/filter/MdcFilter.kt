@@ -4,10 +4,8 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.MDC
-import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import java.util.UUID
-
 
 class MdcFilter : OncePerRequestFilter() {
     companion object {
@@ -18,7 +16,7 @@ class MdcFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         // 1. Get from header (for distributed tracing) or generate new
         val traceId = request.getHeader(TRACE_ID_HEADER) ?: UUID.randomUUID().toString()

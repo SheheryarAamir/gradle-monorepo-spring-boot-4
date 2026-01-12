@@ -13,12 +13,11 @@ private val logger = KotlinLogging.logger {}
 
 @RestController
 @RequestMapping("/api", produces = [MediaType.APPLICATION_JSON_VALUE])
-class AppController (
-    private val appService: AppService
+class AppController(
+    private val appService: AppService,
 ) {
-
     @GetMapping("/info")
-    fun getBuildInfo() : ResponseEntity<String> {
+    fun getBuildInfo(): ResponseEntity<String> {
         withLoggingContext("customerId" to "123", "orderId" to "xyz") {
             logger.info { "Processing hello request" }
             appService.getInfo()

@@ -5,5 +5,4 @@ import org.springframework.data.repository.ListCrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PostRepository : ListCrudRepository<Post, Long> {
-}
+interface PostRepository : ListCrudRepository<Post, Long>

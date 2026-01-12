@@ -6,11 +6,8 @@ import org.springframework.web.client.RestClient
 
 @Configuration
 class HttpClientConfig {
-
     @Bean
-    fun jsonPlaceholderClient(builder: RestClient.Builder): RestClient {
-        return builder
-            .baseUrl("https://jsonplaceholder.typicode.com")
-            .build()
-    }
+    fun jsonPlaceholderClient(builder: RestClient.Builder): RestClient = builder
+        .baseUrl("https://jsonplaceholder.typicode.com")
+        .build()
 }

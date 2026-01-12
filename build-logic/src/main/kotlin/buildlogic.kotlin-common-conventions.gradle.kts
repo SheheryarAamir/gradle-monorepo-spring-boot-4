@@ -5,6 +5,7 @@ plugins {
     id("org.springframework.boot")           // This creates the 'bootJar' task
     id("io.spring.dependency-management")    // Optional but common
     kotlin("plugin.spring")
+    id("buildlogic.spot-less-conventions")
     //id("org.graalvm.buildtools.native")
 }
 
