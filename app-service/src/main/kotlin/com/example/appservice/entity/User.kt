@@ -11,19 +11,14 @@ data class User(
     val id: Long? = null,
     val name: String,
     val email: String,
-
     @Column("mobile_number")
     val mobileNumber: String,
-
     @Column("created_at")
     val createdAt: Instant = Instant.now(),
-
     @Column("created_by")
     val createdBy: String,
-
     @Column("updated_at")
     val updatedAt: Instant? = null,
-
     @Column("updated_by")
-    val updatedBy: String? = null
+    val updatedBy: String? = null,
 )

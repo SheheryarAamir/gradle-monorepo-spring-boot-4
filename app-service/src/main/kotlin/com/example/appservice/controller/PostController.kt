@@ -14,15 +14,15 @@ private val logger = KotlinLogging.logger {}
 
 @RestController
 @RequestMapping("/post", produces = [MediaType.APPLICATION_JSON_VALUE])
-class PostController (private val postService: PostService) {
-
+class PostController(
+    private val postService: PostService,
+) {
     @GetMapping()
-    fun getPosts() : ResponseEntity<List<PostDto>> {
+    fun getPosts(): ResponseEntity<List<PostDto>> {
         val posts = postService.getPostsFromDB() ?: emptyList()
-        return withLoggingContext( "postCount" to posts.size.toString()) {
+        return withLoggingContext("postCount" to posts.size.toString()) {
             logger.info { "Processing Post request" }
             ResponseEntity.ok(posts)
         }
     }
-
 }

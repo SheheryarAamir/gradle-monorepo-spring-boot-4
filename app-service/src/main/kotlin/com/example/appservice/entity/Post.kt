@@ -10,31 +10,23 @@ import java.time.Instant
 data class Post(
     @Id
     val id: Long? = null,
-
     @Column("users_id")
     val userId: Long, // References User.id
-
     val title: String,
     val body: String?,
-
     @Column("created_at")
     val createdAt: Instant = Instant.now(),
-
     @Column("created_by")
     val createdBy: String,
-
     @Column("updated_at")
     val updatedAt: Instant? = null,
-
     @Column("updated_by")
-    val updatedBy: String? = null
+    val updatedBy: String? = null,
 )
 
-fun Post.toDto(): PostDto {
-    return PostDto(
-        userId = this.userId.toString(),
-        id = this.id?.toString() ?: "",
-        title = this.title,
-        body = this.body ?: ""
-    )
-}
+fun Post.toDto(): PostDto = PostDto(
+    userId = this.userId.toString(),
+    id = this.id?.toString() ?: "",
+    title = this.title,
+    body = this.body ?: "",
+)

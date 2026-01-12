@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service
 private val logger = KotlinLogging.logger {}
 
 @Service
-class AppService (private val postService: PostService) {
-
+class AppService(
+    private val postService: PostService,
+) {
     @Observed(name = "get-service-info")
     fun getInfo() {
         postService.getPosts()

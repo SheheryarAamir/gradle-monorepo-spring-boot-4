@@ -8,7 +8,5 @@ import org.springframework.context.annotation.Configuration
 @Configuration(proxyBeanMethods = false)
 class ObservationConfig {
     @Bean
-    fun observedAspect(observationRegistry: ObservationRegistry): ObservedAspect {
-        return ObservedAspect(observationRegistry)
-    }
+    fun observedAspect(observationRegistry: ObservationRegistry): ObservedAspect = ObservedAspect(observationRegistry)
 }

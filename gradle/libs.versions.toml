@@ -7,6 +7,7 @@ otel-instrumentation = "2.23.0-alpha"
 springDependencyManagement = "1.1.7"
 mysql = "9.1.0"
 datasource-micrometer-spring = "2.0.1"
+spotless = "8.1.0"
 
 [libraries]
 # Spring Boot Starters
@@ -20,6 +21,8 @@ spring-boot-starter-aspectj = { module = "org.springframework.boot:spring-boot-s
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc" }
 spring-boot-h2 = { module = "org.springframework.boot:spring-boot-h2console" }
 spring-boot-starter-jdbc-test = { module = "org.springframework.boot:spring-boot-starter-data-jdbc-test" }
+
+spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "com.diffplug.spotless.gradle.plugin", version.ref = "spotless" }
 
 mysql-connector = { group = "com.mysql", name = "mysql-connector-j", version.ref = "mysql" }
 datasource-micrometer = { group = "net.ttddyy.observation", name="datasource-micrometer-spring-boot", version.ref="datasource-micrometer-spring"}
@@ -48,3 +51,4 @@ spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
