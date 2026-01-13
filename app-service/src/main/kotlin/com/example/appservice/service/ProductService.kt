@@ -4,14 +4,12 @@ import com.example.appservice.event.ProductCreatedEvent
 import com.example.appservice.model.CreateProductRestModel
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.future.await
-import org.springframework.http.ResponseEntity
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.RequestBody
 import java.util.UUID
 
 @Service
-class ProductService (private val kafkaTemplate: KafkaTemplate<String, ProductCreatedEvent>) {
+class ProductService(private val kafkaTemplate: KafkaTemplate<String, ProductCreatedEvent>) {
     private val logger = KotlinLogging.logger {}
 
     suspend fun createProduct(productRestModel: CreateProductRestModel): String {
@@ -21,13 +19,16 @@ class ProductService (private val kafkaTemplate: KafkaTemplate<String, ProductCr
             productId,
             productRestModel.title,
             productRestModel.price,
-            productRestModel.quantity
+            productRestModel.quantity,
         )
-        try{
-            val result = kafkaTemplate.send("product-created-events-topic",
-                productId, productCreatedEvent).await()
+        try {
+            val result = kafkaTemplate.send(
+                "product-created-events-topic",
+                productId,
+                productCreatedEvent,
+            ).await()
             logger.info { "Message sent to product created event: ${result.recordMetadata}" }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             logger.error { "Product $productCreatedEvent could not be created - ${e.message}" }
         }
         logger.info { "Return product created with id $productId" }

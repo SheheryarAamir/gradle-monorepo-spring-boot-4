@@ -9,6 +9,7 @@ class AppService(
     private val postService: PostService,
 ) {
     private val logger = KotlinLogging.logger {}
+
     @Observed(name = "get-service-info")
     fun getInfo() {
         postService.getPosts()
