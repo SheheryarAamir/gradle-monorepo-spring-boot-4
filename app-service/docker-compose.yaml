@@ -1,18 +1,21 @@
 services:
   app-service:
     build:
-      context: ..
+      context: .
       dockerfile: app-service/Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/appservice
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       OTEL_INSTRUMENTATION_JDBC_DATASOURCE_PEER_SERVICE_MAPPING: "appservice=mysql-appservice"
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9090
       #- OTEL_SERVICE_NAME=app-service
       #- OTEL_INSTRUMENTATION_COMMON_PEER_SERVICE_MAPPING=jsonplaceholder.typicode.com=JSONPlaceholder
     depends_on:
       mysql:
         condition: service_healthy
+      kafka:
+        condition: service_started
     ports:
       - "8080:8080"
     networks:
