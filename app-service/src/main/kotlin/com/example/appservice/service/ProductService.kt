@@ -3,6 +3,7 @@ package com.example.appservice.service
 import com.example.appservice.event.ProductCreatedEvent
 import com.example.appservice.model.CreateProductRestModel
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.oshai.kotlinlogging.withLoggingContext
 import kotlinx.coroutines.future.await
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
@@ -15,23 +16,32 @@ class ProductService(private val kafkaTemplate: KafkaTemplate<String, ProductCre
     suspend fun createProduct(productRestModel: CreateProductRestModel): String {
         val productId = UUID.randomUUID().toString()
 
-        val productCreatedEvent = ProductCreatedEvent(
-            productId,
-            productRestModel.title,
-            productRestModel.price,
-            productRestModel.quantity,
-        )
-        try {
-            val result = kafkaTemplate.send(
-                "product-created-events-topic",
+        withLoggingContext("productId" to productId) {
+            val productCreatedEvent = ProductCreatedEvent(
                 productId,
-                productCreatedEvent,
-            ).await()
-            logger.info { "Message sent to product created event: ${result.recordMetadata}" }
-        } catch (e: Exception) {
-            logger.error { "Product $productCreatedEvent could not be created - ${e.message}" }
+                productRestModel.title,
+                productRestModel.price,
+                productRestModel.quantity,
+            )
+            try {
+                val result = kafkaTemplate.send(
+                    "product-created-events-topic",
+                    productId,
+                    productCreatedEvent,
+                ).await()
+                withLoggingContext(
+                    "partition" to result.recordMetadata.partition().toString(),
+                    "topic" to result.recordMetadata.topic(),
+                    "offset" to result.recordMetadata.offset().toString(),
+                ) {
+                    logger.info { "Message sent to product created event: ${result.recordMetadata}" }
+                }
+            } catch (e: Exception) {
+                logger.error { "Product $productCreatedEvent could not be created - ${e.message}" }
+                throw e
+            }
+            logger.info { "Return product created with id $productId" }
         }
-        logger.info { "Return product created with id $productId" }
         return productId
     }
 }
