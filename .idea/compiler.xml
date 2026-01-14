@@ -4,15 +4,22 @@
     <bytecodeTargetLevel target="1.6">
       <module name="kotlin-monorepo.app-service.aot" target="25" />
       <module name="kotlin-monorepo.app-service.aotTest" target="25" />
+      <module name="kotlin-monorepo.kafka-consumer.main" target="25" />
+      <module name="kotlin-monorepo.kafka-consumer.test" target="25" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="kafka-consumer.kotlin-monorepo.kafka-consumer.main" options="-parameters" />
+      <module name="kafka-consumer.kotlin-monorepo.kafka-consumer.test" options="-parameters" />
       <module name="kotlin-monorepo.app-service" options="-parameters" />
       <module name="kotlin-monorepo.app-service.aot" options="-parameters" />
       <module name="kotlin-monorepo.app-service.aotTest" options="-parameters" />
       <module name="kotlin-monorepo.app-service.main" options="-parameters" />
       <module name="kotlin-monorepo.app-service.test" options="-parameters" />
+      <module name="kotlin-monorepo.kafka-consumer" options="-parameters" />
+      <module name="kotlin-monorepo.kafka-consumer.main" options="-parameters" />
+      <module name="kotlin-monorepo.kafka-consumer.test" options="-parameters" />
     </option>
   </component>
 </project>

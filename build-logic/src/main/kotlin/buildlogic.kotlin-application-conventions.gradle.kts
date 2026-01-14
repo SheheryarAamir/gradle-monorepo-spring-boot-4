@@ -100,30 +100,4 @@ tasks.register("dockerBuildAndRun") {
 
 
 
-tasks.register<Exec>("dockerComposeUp") {
-    group = "docker"
-    //dependsOn("dockerBuild")
-    workingDir = project.rootDir
-
-    executable = dockerComposePath // Directly point to the binary
-    args(
-        "compose",
-        "--project-directory", project.rootDir.absolutePath, // Forces root context
-        "-f", "docker-compose.infra.yaml",
-        "-f", "${project.name}/docker-compose.yaml",
-        "up", "--build", "-d"
-    )
-}
-
-tasks.register<Exec>("dockerComposeDown") {
-    group = "docker"
-    workingDir = project.rootDir
-
-    executable = dockerComposePath
-    args(
-        "compose", "--project-directory", project.rootDir.absolutePath, // Forces root context
-        "-f", "docker-compose.infra.yaml",
-        "-f", "${project.name}/docker-compose.yaml",
-        "down"
-    )
-}
+// Tasks dockerComposeUp and dockerComposeDown moved to root build.gradle.kts for global orchestration

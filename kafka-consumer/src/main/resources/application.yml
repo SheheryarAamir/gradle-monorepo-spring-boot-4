@@ -1,0 +1,54 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: kafka-consumer
+
+  kafka:
+    template:
+      observation-enabled: true
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      properties:
+        "spring.json.trusted.packages": "com.example.appservice.event"
+
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      group-id: ${spring.application.name}
+
+
+otel:
+  instrumentation:
+    jdbc:
+      enabled: true
+
+management:
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.client.requests: true
+  opentelemetry:
+    # This is the primary block for Spring Boot 4.0.1
+    logging:
+      export:
+        otlp:
+          endpoint: http://alloy:4318/v1/logs
+    tracing:
+      export:
+        otlp:
+          endpoint: http://alloy:4318/v1/traces
+  otlp:
+    metrics:
+      export:
+        url: http://alloy:4318/v1/metrics
+        step: 10s
+  tracing:
+    sampling:
+      probability: 1.0
+  observations:
+    http:
+      client:
+        requests:
+          enabled: true
+    annotations:
+      enabled: true
