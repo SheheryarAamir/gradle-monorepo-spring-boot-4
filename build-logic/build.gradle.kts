@@ -24,4 +24,5 @@ dependencies {
     implementation(libs.spring.dependency.management.plugin)
     implementation(libs.graalvm.gradle.plugin)
     implementation(libs.spotless.gradlePlugin)
+    implementation(libs.avro.gradle.plugin)
 }

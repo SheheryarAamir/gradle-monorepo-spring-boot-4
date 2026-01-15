@@ -1,7 +1,7 @@
 package com.example.appservice.service
 
-import com.example.appservice.event.ProductCreatedEvent
 import com.example.appservice.model.CreateProductRestModel
+import com.example.events.ProductCreatedEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.oshai.kotlinlogging.withLoggingContext
 import kotlinx.coroutines.future.await
@@ -17,12 +17,13 @@ class ProductService(private val kafkaTemplate: KafkaTemplate<String, ProductCre
         val productId = UUID.randomUUID().toString()
 
         withLoggingContext("productId" to productId) {
-            val productCreatedEvent = ProductCreatedEvent(
-                productId,
-                productRestModel.title,
-                productRestModel.price,
-                productRestModel.quantity,
-            )
+            val productCreatedEvent = ProductCreatedEvent.newBuilder()
+                .setProductId(productId)
+                .setTitle(productRestModel.title)
+                // You can pass the BigDecimal directly now!
+                .setPrice(productRestModel.price)
+                .setQuantity(productRestModel.quantity)
+                .build()
             try {
                 val result = kafkaTemplate.send(
                     "product-created-events-topic",

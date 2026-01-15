@@ -8,6 +8,9 @@ springDependencyManagement = "1.1.7"
 mysql = "9.1.0"
 datasource-micrometer-spring = "2.0.1"
 spotless = "8.1.0"
+avroPlugin = "1.9.1"
+avroCore = "1.11.3"
+confluent = "7.5.0"
 
 [libraries]
 # Spring Boot Starters
@@ -20,6 +23,7 @@ spring-boot-starter-restclient = { module = "org.springframework.boot:spring-boo
 spring-boot-starter-aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc" }
 spring-boot-kafka = { module = "org.springframework.boot:spring-boot-kafka" }
+spring-boot-kafka-test = { module = "org.springframework.kafka:spring-kafka-test"}
 spring-boot-h2 = { module = "org.springframework.boot:spring-boot-h2console" }
 spring-boot-starter-jdbc-test = { module = "org.springframework.boot:spring-boot-starter-data-jdbc-test" }
 spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
@@ -49,9 +53,15 @@ kotlin-allopen = { module = "org.jetbrains.kotlin:kotlin-allopen", version.ref =
 spring-dependency-management-plugin = { module = "io.spring.gradle:dependency-management-plugin", version.ref = "springDependencyManagement" }
 graalvm-gradle-plugin = { module = "org.graalvm.buildtools:native-gradle-plugin", version = "0.11.3" }
 
+#kafka avro
+avro-gradle-plugin = { group = "com.github.davidmc24.gradle.plugin", name="gradle-avro-plugin", version.ref = "avroPlugin" }
+avro-core = { group = "org.apache.avro", name="avro", version.ref = "avroCore" }
+confluent-avro-serializer = { group = "io.confluent", name="kafka-avro-serializer", version.ref = "confluent" }
+
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+avro = { id = "com.github.davidmc24.gradle.plugin", version.ref = "avroPlugin" }

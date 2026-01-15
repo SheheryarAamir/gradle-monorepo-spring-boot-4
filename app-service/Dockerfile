@@ -9,6 +9,7 @@ COPY build-logic build-logic
 COPY settings.gradle.kts .
 COPY build.gradle.kts .
 COPY app-service app-service
+COPY common-events common-events
 
 RUN chmod +x gradlew && \
     ./gradlew dependencies --no-daemon || true
@@ -33,6 +34,8 @@ RUN java -Djarmode=layertools -jar app.jar extract
 # --- Stage 4: Runtime ---
 FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
+
+RUN apk add --no-cache curl
 
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring

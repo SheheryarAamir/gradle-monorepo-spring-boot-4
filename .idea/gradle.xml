@@ -22,6 +22,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app-service" />
             <option value="$PROJECT_DIR$/build-logic" />
+            <option value="$PROJECT_DIR$/common-events" />
             <option value="$PROJECT_DIR$/kafka-consumer" />
           </set>
         </option>
@@ -45,6 +46,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app-service" />
             <option value="$PROJECT_DIR$/build-logic" />
+            <option value="$PROJECT_DIR$/common-events" />
             <option value="$PROJECT_DIR$/kafka-consumer" />
           </set>
         </option>
@@ -68,6 +70,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app-service" />
             <option value="$PROJECT_DIR$/build-logic" />
+            <option value="$PROJECT_DIR$/common-events" />
             <option value="$PROJECT_DIR$/kafka-consumer" />
           </set>
         </option>
