@@ -2,10 +2,10 @@
 kotlin = "2.3.0"
 springBoot = "4.0.1"
 kotlinxCoroutines = "1.10.2"
-kotlinLogging = "7.0.0"
+kotlinLogging = "7.0.14"
 otel-instrumentation = "2.23.0-alpha"
 springDependencyManagement = "1.1.7"
-mysql = "9.1.0"
+mysql = "9.5.0"
 datasource-micrometer-spring = "2.0.1"
 spotless = "8.1.0"
 
@@ -32,9 +32,9 @@ datasource-micrometer = { group = "net.ttddyy.observation", name="datasource-mic
 
 otel-logback-appender = { module = "io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0", version.ref = "otel-instrumentation" }
 # The bridge that turns Spring Observations into OTel Spans
-micrometer-tracing-bridge-otel = { module = "io.micrometer:micrometer-tracing-bridge-otel", version="1.6.1"}
+micrometer-tracing-bridge-otel = { module = "io.micrometer:micrometer-tracing-bridge-otel", version="1.6.2"}
 # The exporter for OTLP traces (often needed alongside the bridge)
-opentelemetry-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporter-otlp", version="1.57.0" }
+opentelemetry-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporter-otlp", version="1.58.0" }
 kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlinLogging" }
 kotlin-reflect = {group = "org.jetbrains.kotlin", name ="kotlin-reflect", version.ref = "kotlin"}
 
