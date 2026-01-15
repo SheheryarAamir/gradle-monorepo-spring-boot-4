@@ -10,6 +10,7 @@ spring:
       acks: all
       retries: 10
       properties:
+        "schema.registry.url": "http://schema-registry:8081"
         "max.in.flight.requests.per.connection": 5
         "enable.idempotence": true
         "linger.ms": 0
@@ -18,7 +19,7 @@ spring:
         "retry.backoff.ms": 1000
       bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
     template:
       observation-enabled: true
 
@@ -52,6 +53,15 @@ otel:
       enabled: true
 
 management:
+  endpoints:
+    web:
+      exposure:
+        include: "health"
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
   metrics:
     distribution:
       percentiles-histogram:

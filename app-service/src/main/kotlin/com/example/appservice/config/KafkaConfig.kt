@@ -1,8 +1,9 @@
 package com.example.appservice.config
 
-import com.example.appservice.event.ProductCreatedEvent
+import com.example.events.ProductCreatedEvent
 import io.micrometer.observation.ObservationRegistry
 import org.apache.kafka.clients.admin.NewTopic
+import org.apache.kafka.common.config.TopicConfig
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.config.TopicBuilder
@@ -29,5 +30,6 @@ class KafkaConfig {
         .name("product-created-events-topic")
         .partitions(3)
         .replicas(1)
+        .config(TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG, "1")
         .build()
 }

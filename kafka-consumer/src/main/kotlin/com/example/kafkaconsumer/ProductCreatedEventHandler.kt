@@ -1,6 +1,6 @@
 package com.example.kafkaconsumer
 
-import com.example.kafkaconsumer.event.ProductCreatedEvent
+import com.example.events.ProductCreatedEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.kafka.annotation.KafkaHandler
 import org.springframework.kafka.annotation.KafkaListener

@@ -1,4 +1,4 @@
-val libs = the<VersionCatalogsExtension>().named("libs")
+val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm")
@@ -7,11 +7,6 @@ plugins {
     kotlin("plugin.spring")
     id("buildlogic.spot-less-conventions")
     //id("org.graalvm.buildtools.native")
-}
-
-repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
 }
 
 dependencies {
@@ -44,6 +39,7 @@ dependencies {
     //testImplementation(libs.findLibrary("spring-boot-starter-web-test").get())
     //testImplementation(libs.findLibrary("spring-boot-starter-jdbc-test").get())
     testImplementation(libs.findLibrary("spring-starter-test").get())
+    testImplementation(libs.findLibrary("spring-boot-kafka-test").get())
 
 }
 
