@@ -26,6 +26,33 @@ A pre-configured observability pipeline using **Grafana Alloy** as the central c
 - **Traces**: Micrometer Tracing $\rightarrow$ Alloy $\rightarrow$ **Tempo**
 - **Visualization**: **Grafana** pre-wired with datasources.
 
+
+### 4. Kafka Producer and Consumer
+
+The project implements a comprehensive Kafka producer and consumer flow to demonstrate event-driven architecture and observability.
+
+#### Architecture
+
+1.  **Producer (`app-service`)**:
+    -   The `ProductService` creates a `ProductCreatedEvent` and publishes it to the `product-created-events-topic`.
+    -   It uses a configured `KafkaTemplate` with observation enabled to propagate traces.
+
+2.  **Consumer (`kafka-consumer`)**:
+    -   The `ProductCreatedEventHandler` listens to the `product-created-events-topic`.
+    -   It uses `@KafkaListener` and a configured `ConcurrentKafkaListenerContainerFactory` with observation enabled to continue the trace context.
+
+#### End-to-End Traces Propagation
+
+With Spring Boot 3/4 and Micrometer Tracing (replacing Spring Cloud Sleuth), the application automatically handles trace context propagation over Kafka headers.
+
+-   **Trace Context w3c**: The `traceparent` and `tracestate` headers are injected into the Kafka message by the producer.
+-   **Extraction**: The consumer extracts these headers and starts a new span that is a child of the producer's span.
+
+This ensures that you can visualize the entire lifecycle of a request in Grafana Tempo, from the initial REST call to `app-service` to the asynchronous processing in `kafka-consumer`.
+
+![Grafana Traces](./grafana-traces.png)
+*Figure: End-to-end trace visualization in Grafana showing the span propagation from Producer to Consumer.*
+
 ### 4. Infrastructure as Code
 - **Docker Compose**: Orchestrates the entire stack.
 - **Gradle Tasks**: Custom tasks to build containers, run infrastructure, and deploy the app seamlessly.
@@ -41,24 +68,35 @@ A pre-configured observability pipeline using **Grafana Alloy** as the central c
 ### Build & Run Application
 This repository includes custom Gradle tasks to simplify the Docker workflow.
 
-| Task | Command | Description |
-|------|---------|-------------|
-| **Build Image** | `./gradlew :app-service:dockerBuild` | Builds the Spring Boot JAR and Docker image (`app-service:latest`). |
-| **Run Container** | `./gradlew :app-service:dockerRun` | Runs the container in detached mode on port `8080`. |
-| **Stop** | `./gradlew :app-service:dockerStop` | Stops and removes the application container. |
-| **Cycle** | `./gradlew :app-service:dockerBuildAndRun` | Stops, builds, and runs the fresh container. |
+| Task                      | Command                                   | Description                                 |
+|---------------------------|-------------------------------------------|---------------------------------------------|
+| **Spotless Apply**        | `./gradlew spotlessApply `                | check and apply code format (`app-service:latest`). |
+| **Build & Run Container** | `./gradlew dockerComposeUp`               | Build & Runs the container in detached mode. |
+| **Stop**                  | `./gradlew dockerComposeDown`             | Stops and removes container.     |
 
 ### Run Full Stack (Infra + App)
 To spin up the entire observability stack alongside the application:
 
 ```bash
-./gradlew :app-service:dockerComposeUp
+./gradlew dockerComposeUp
 ```
 This runs `docker-compose.infra.yaml` (Observability) + `app-service/docker-compose.yaml` (App).
 
 To tear everything down:
 ```bash
-./gradlew :app-service:dockerComposeDown
+./gradlew dockerComposeDown
+```
+---
+
+### Example Request Payload
+```curl
+curl --location 'http://localhost:8080/products' \
+--header 'Content-Type: application/json' \
+--data '{
+    "title": "Macbook",
+    "price": 3999.99,
+    "quantity": 1
+}'
 ```
 
 ---
@@ -74,6 +112,12 @@ To tear everything down:
 │   ├── src/                      # Source code
 │   ├── Dockerfile                # Configured for Layered JARs
 │   └── docker-compose.yaml       # App specific compose file
+├── kafka-consumer/                  # Example Spring Boot 4 Service
+│   ├── src/                      # Source code
+│   ├── Dockerfile                # Configured for Layered JARs
+│   └── docker-compose.yaml       # App specific compose file
+├── common-events/                  # Module to keep common schema
+│   ├── src/                      # avro schema
 ├── observability/                # Configs for Observability Stack
 │   ├── alloy/                    # Alloy collector config
 │   ├── grafana/                  # Datasources
