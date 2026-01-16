@@ -1,4 +1,4 @@
-package com.example.kafkaconsumer
+package com.example.kafkaconsumer.handler
 
 import com.example.events.ProductCreatedEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
