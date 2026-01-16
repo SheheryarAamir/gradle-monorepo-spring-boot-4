@@ -3,3 +3,23 @@ server:
 spring:
   application:
     name: kafka-consumer
+
+
+springwolf:
+  docket:
+    base-package: com.example
+    info:
+      title: Consumer API
+      version: 1.0.0
+      description: AsyncAPI documentation for Product Events
+    servers:
+      kafka:
+        host: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+        protocol: kafka
+        description: Kafka broker for product events
+  scanner:
+    kafka:
+      listener:
+        enabled: true
+      producer:
+        enabled: true

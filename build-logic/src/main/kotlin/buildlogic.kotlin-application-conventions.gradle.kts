@@ -8,6 +8,7 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
     id("buildlogic.kotlin-common-conventions")
+    id("buildlogic.asyncapi-conventions")
     application
 }
 
