@@ -1,7 +1,6 @@
 package com.example.appservice.config
 
 import com.example.events.ProductCreatedEvent
-import io.micrometer.observation.ObservationRegistry
 import org.apache.kafka.clients.admin.NewTopic
 import org.apache.kafka.common.config.TopicConfig
 import org.springframework.context.annotation.Bean
@@ -17,7 +16,6 @@ class KafkaConfig {
     @Bean
     fun kafkaTemplate(
         producerFactory: ProducerFactory<String, ProductCreatedEvent>,
-        observationRegistry: ObservationRegistry,
     ): KafkaTemplate<String, ProductCreatedEvent> {
         val template = KafkaTemplate(producerFactory)
         template.setObservationEnabled(true)

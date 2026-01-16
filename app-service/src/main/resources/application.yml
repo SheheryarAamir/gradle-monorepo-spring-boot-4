@@ -84,6 +84,8 @@ management:
   tracing:
     sampling:
       probability: 1.0
+  propagation:
+    type: w3c, b3
   observations:
     http:
       client:
