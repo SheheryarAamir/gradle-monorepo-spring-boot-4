@@ -68,11 +68,12 @@ This ensures that you can visualize the entire lifecycle of a request in Grafana
 ### Build & Run Application
 This repository includes custom Gradle tasks to simplify the Docker workflow.
 
-| Task                      | Command                                   | Description                                 |
-|---------------------------|-------------------------------------------|---------------------------------------------|
-| **Spotless Apply**        | `./gradlew spotlessApply `                | check and apply code format (`app-service:latest`). |
-| **Build & Run Container** | `./gradlew dockerComposeUp`               | Build & Runs the container in detached mode. |
-| **Stop**                  | `./gradlew dockerComposeDown`             | Stops and removes container.     |
+| Task                     | Command                                   | Description                                         |
+|--------------------------|-------------------------------------------|-----------------------------------------------------|
+| **Spotless Apply**       | `./gradlew spotlessApply `                | check and apply code format (`app-service:latest`). |
+| **Build & Run Container** | `./gradlew dockerComposeUp`               | Build & Runs the container in detached mode.        |
+| **Stop**                 | `./gradlew dockerComposeDown`             | Stops and removes container.                        |
+| **Async API**            | `./gradlew generateAsyncApi`             | Generate Async API docs doc/<module>/asyncapi.json. |
 
 ### Run Full Stack (Infra + App)
 To spin up the entire observability stack alongside the application:

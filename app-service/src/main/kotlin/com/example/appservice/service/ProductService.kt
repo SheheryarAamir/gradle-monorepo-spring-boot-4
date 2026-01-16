@@ -4,6 +4,8 @@ import com.example.appservice.model.CreateProductRestModel
 import com.example.events.ProductCreatedEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.oshai.kotlinlogging.withLoggingContext
+import io.github.springwolf.core.asyncapi.annotations.AsyncOperation
+import io.github.springwolf.core.asyncapi.annotations.AsyncPublisher
 import kotlinx.coroutines.future.await
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
@@ -13,6 +15,19 @@ import java.util.UUID
 class ProductService(private val kafkaTemplate: KafkaTemplate<String, ProductCreatedEvent>) {
     private val logger = KotlinLogging.logger {}
 
+    @AsyncPublisher(
+        operation = AsyncOperation(
+            channelName = "product-created-events-topic",
+            description = "Publishes a product creation event with tracing context.",
+            payloadType = ProductCreatedEvent::class,
+            headers = AsyncOperation.Headers(
+                schemaName = "TracingHeaders",
+                values = [
+                    AsyncOperation.Headers.Header(name = "traceparent", description = "W3C Trace Context header"),
+                ],
+            ),
+        ),
+    )
     suspend fun createProduct(productRestModel: CreateProductRestModel): String {
         val productId = UUID.randomUUID().toString()
 

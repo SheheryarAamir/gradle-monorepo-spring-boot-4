@@ -11,6 +11,7 @@ spotless = "8.1.0"
 avroPlugin = "1.9.1"
 avroCore = "1.11.3"
 confluent = "7.5.0"
+springwolf = "1.20.0"
 
 [libraries]
 # Spring Boot Starters
@@ -28,8 +29,14 @@ spring-boot-h2 = { module = "org.springframework.boot:spring-boot-h2console" }
 spring-boot-starter-jdbc-test = { module = "org.springframework.boot:spring-boot-starter-data-jdbc-test" }
 spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+spring-boot-jackson = {module = "org.springframework.boot:spring-boot-starter-jackson"}
 
+#spotless
 spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "com.diffplug.spotless.gradle.plugin", version.ref = "spotless" }
+
+#springwolf - asyncapi
+springwolf-kafka = { group = "io.github.springwolf", name = "springwolf-kafka", version.ref = "springwolf" }
+springwolf-ui = { group = "io.github.springwolf", name = "springwolf-ui", version.ref = "springwolf" }
 
 mysql-connector = { group = "com.mysql", name = "mysql-connector-j", version.ref = "mysql" }
 datasource-micrometer = { group = "net.ttddyy.observation", name="datasource-micrometer-spring-boot", version.ref="datasource-micrometer-spring"}

@@ -20,6 +20,11 @@ dependencies {
     implementation(libs.findLibrary("spring-kafka").get())
     implementation(libs.findLibrary("spring-boot-kafka").get())
     implementation(libs.findLibrary("jackson-module-kotlin").get())
+    implementation(libs.findLibrary("spring-boot-jackson").get())
+
+
+    implementation(libs.findLibrary("springwolf-kafka").get())
+    implementation(libs.findLibrary("springwolf-ui").get())
 
 
     implementation(libs.findLibrary("spring-boot-starter-otel").get())

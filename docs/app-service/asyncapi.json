@@ -1,0 +1,106 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Product Service API",
+    "version": "1.0.0",
+    "description": "AsyncAPI documentation for Product Events",
+    "x-generator": "springwolf"
+  },
+  "defaultContentType": "application/json",
+  "servers": {
+    "kafka": {
+      "host": "localhost:9092",
+      "protocol": "kafka",
+      "description": "Kafka broker for product events"
+    }
+  },
+  "channels": {
+    "product-created-events-topic": {
+      "address": "product-created-events-topic",
+      "messages": {
+        "com.example.events.ProductCreatedEvent": {
+          "$ref": "#/components/messages/com.example.events.ProductCreatedEvent"
+        }
+      },
+      "bindings": { }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TracingHeaders": {
+        "title": "TracingHeaders",
+        "type": "object",
+        "properties": {
+          "traceparent": {
+            "type": "string",
+            "description": "W3C Trace Context header"
+          }
+        },
+        "examples": [
+          {
+            "traceparent": "string"
+          }
+        ]
+      },
+      "com.example.events.ProductCreatedEvent": {
+        "title": "ProductCreatedEvent",
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "number"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "examples": [
+          {
+            "price": 1.1,
+            "productId": "string",
+            "quantity": 0,
+            "title": "string"
+          }
+        ]
+      }
+    },
+    "messages": {
+      "com.example.events.ProductCreatedEvent": {
+        "headers": {
+          "$ref": "#/components/schemas/TracingHeaders"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/com.example.events.ProductCreatedEvent"
+          }
+        },
+        "name": "com.example.events.ProductCreatedEvent",
+        "title": "ProductCreatedEvent",
+        "bindings": { }
+      }
+    }
+  },
+  "operations": {
+    "product-created-events-topic_send_createProduct": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/product-created-events-topic"
+      },
+      "title": "product-created-events-topic_send",
+      "description": "Publishes a product creation event with tracing context.",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/product-created-events-topic/messages/com.example.events.ProductCreatedEvent"
+        }
+      ]
+    }
+  }
+}
