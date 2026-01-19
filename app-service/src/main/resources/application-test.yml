@@ -3,6 +3,24 @@ server:
 spring:
   application:
     name: app-service
+  kafka:
+    bootstrap-servers: localhost:1
+    admin:
+      properties:
+        "retries": 0
+        "request.timeout.ms": 1
+        "default.api.timeout.ms": 1
+
+  ssl:
+    bundle:
+      jks:
+        bad-ssl-bundle:
+          key:
+            alias: "1"
+          keystore:
+            location: "classpath:certs/badssl.com-client.p12"
+            password: "badssl.com"
+            type: "PKCS12"
 
   h2:
     console:
@@ -49,9 +67,9 @@ management:
     http:
       client:
         requests:
-          enabled: true
+          enabled: false
     annotations:
-      enabled: true
+      enabled: false
 
 
 springwolf:
@@ -72,3 +90,9 @@ springwolf:
         enabled: true
       producer:
         enabled: true
+
+bad-ssl:
+  base-url: "https://client.badssl.com"
+  username: "test-user"
+  password: "test-password"
+  ssl-bundle-name: "bad-ssl-bundle"

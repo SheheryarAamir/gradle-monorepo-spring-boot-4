@@ -22,6 +22,9 @@ dependencies {
     implementation(libs.findLibrary("jackson-module-kotlin").get())
     implementation(libs.findLibrary("spring-boot-jackson").get())
 
+    implementation(libs.findLibrary("apache-httpclient5").get())
+    implementation(libs.findLibrary("apache-httpcore5").get())
+    implementation(libs.findLibrary("caffeine").get())
 
     implementation(libs.findLibrary("springwolf-kafka").get())
     implementation(libs.findLibrary("springwolf-ui").get())
@@ -45,6 +48,8 @@ dependencies {
     //testImplementation(libs.findLibrary("spring-boot-starter-jdbc-test").get())
     testImplementation(libs.findLibrary("spring-starter-test").get())
     testImplementation(libs.findLibrary("spring-boot-kafka-test").get())
+    testImplementation(libs.findLibrary("spring-boot-starter-web-test").get())
+    testImplementation(libs.findLibrary("spring-boot-starter-restclient-test").get())
 
 }
 

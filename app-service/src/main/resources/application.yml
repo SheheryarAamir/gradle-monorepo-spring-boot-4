@@ -1,9 +1,20 @@
 server:
   port: 8080
+
 spring:
   application:
     name: app-service
 
+  ssl:
+    bundle:
+      jks:
+        bad-ssl-bundle:
+          key:
+            alias: "1"
+          keystore:
+            location: "classpath:certs/badssl.com-client.p12"
+            password: "badssl.com"
+            type: "PKCS12"
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     producer:
@@ -112,3 +123,9 @@ springwolf:
         enabled: true
       producer:
         enabled: true
+
+bad-ssl:
+  base-url: "https://client.badssl.com"
+  username: "test-user"
+  password: "test-password"
+  ssl-bundle-name: "bad-ssl-bundle"

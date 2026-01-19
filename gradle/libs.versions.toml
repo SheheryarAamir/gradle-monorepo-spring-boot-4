@@ -12,6 +12,9 @@ avroPlugin = "1.9.1"
 avroCore = "1.11.3"
 confluent = "7.5.0"
 springwolf = "1.20.0"
+caffeine = "3.1.8"
+apacheHttpclient = "5.6"
+apacheHttpcore = "5.4"
 
 [libraries]
 # Spring Boot Starters
@@ -21,6 +24,7 @@ spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spr
 spring-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-otel = { module = "org.springframework.boot:spring-boot-starter-opentelemetry" }
 spring-boot-starter-restclient = { module = "org.springframework.boot:spring-boot-starter-restclient" }
+spring-boot-starter-restclient-test = { module = "org.springframework.boot:spring-boot-starter-restclient-test" }
 spring-boot-starter-aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc" }
 spring-boot-kafka = { module = "org.springframework.boot:spring-boot-kafka" }
@@ -30,6 +34,11 @@ spring-boot-starter-jdbc-test = { module = "org.springframework.boot:spring-boot
 spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 spring-boot-jackson = {module = "org.springframework.boot:spring-boot-starter-jackson"}
+
+caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.ref = "caffeine" }
+
+apache-httpclient5 = { group = "org.apache.httpcomponents.client5", name = "httpclient5", version.ref = "apacheHttpclient" }
+apache-httpcore5 = { group = "org.apache.httpcomponents.core5", name = "httpcore5", version.ref = "apacheHttpcore" }
 
 #spotless
 spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "com.diffplug.spotless.gradle.plugin", version.ref = "spotless" }

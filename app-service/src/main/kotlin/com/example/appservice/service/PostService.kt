@@ -3,12 +3,14 @@ package com.example.appservice.service
 import com.example.appservice.entity.toDto
 import com.example.appservice.repository.PostRepository
 import io.micrometer.observation.annotation.Observed
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 
 @Service
 class PostService(
+    @Qualifier("jsonPlaceholderClient")
     private val restClient: RestClient,
     private val postRepository: PostRepository,
 ) {
