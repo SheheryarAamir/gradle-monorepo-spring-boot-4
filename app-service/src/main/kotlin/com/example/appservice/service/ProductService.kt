@@ -7,6 +7,7 @@ import io.github.oshai.kotlinlogging.withLoggingContext
 import io.github.springwolf.core.asyncapi.annotations.AsyncOperation
 import io.github.springwolf.core.asyncapi.annotations.AsyncPublisher
 import kotlinx.coroutines.future.await
+import org.apache.kafka.clients.producer.ProducerRecord
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -35,16 +36,18 @@ class ProductService(private val kafkaTemplate: KafkaTemplate<String, ProductCre
             val productCreatedEvent = ProductCreatedEvent.newBuilder()
                 .setProductId(productId)
                 .setTitle(productRestModel.title)
-                // You can pass the BigDecimal directly now!
                 .setPrice(productRestModel.price)
                 .setQuantity(productRestModel.quantity)
                 .build()
             try {
-                val result = kafkaTemplate.send(
+                val record = ProducerRecord(
                     "product-created-events-topic",
                     productId,
                     productCreatedEvent,
-                ).await()
+                )
+                record.headers().add("messageId", UUID.randomUUID().toString().toByteArray())
+
+                val result = kafkaTemplate.send(record).await()
                 withLoggingContext(
                     "partition" to result.recordMetadata.partition().toString(),
                     "topic" to result.recordMetadata.topic(),

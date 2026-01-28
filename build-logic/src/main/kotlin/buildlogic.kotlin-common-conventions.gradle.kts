@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.findLibrary("spring-boot-starter-restclient").get())
     implementation(libs.findLibrary("spring-boot-starter-jdbc").get())
     implementation(libs.findLibrary("spring-boot-h2").get())
+    implementation(libs.findLibrary("spring-boot-starter-json").get())
 
     implementation(libs.findLibrary("kotlin-logging").get())
     implementation(libs.findLibrary("kotlin-reflect").get())
