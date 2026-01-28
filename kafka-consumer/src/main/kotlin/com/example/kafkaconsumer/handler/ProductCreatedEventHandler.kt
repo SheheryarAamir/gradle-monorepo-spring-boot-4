@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @KafkaListener(topics = ["product-created-events-topic"])
-class ProductCreatedEventHandler {
+open class ProductCreatedEventHandler {
 
     private val logger = KotlinLogging.logger {}
 
@@ -27,7 +27,7 @@ class ProductCreatedEventHandler {
         ),
     )
     @KafkaHandler
-    fun handle(productCreatedEvent: ProductCreatedEvent) {
+    open fun handle(productCreatedEvent: ProductCreatedEvent) {
         logger.info { "Product created event received: ${productCreatedEvent.productId}" }
     }
 }

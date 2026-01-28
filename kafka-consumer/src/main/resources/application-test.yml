@@ -3,6 +3,26 @@ server:
 spring:
   application:
     name: kafka-consumer
+  kafka:
+    template:
+      observation-enabled: true
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      listener:
+        # This is the "Magic Fix": It retries the connection
+        # if the broker/topic isn't ready at startup.
+        missing-topics-fatal: false
+        # If a rebalance happens, don't stop the whole container
+        change-consumer-group-metadata: true
+      auto-offset-reset: earliest
+      properties:
+        "schema.registry.url": "http://schema-registry:8081"
+        "specific.avro.reader": "true"
+
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      group-id: ${spring.application.name}
+
 
 
 springwolf:
