@@ -30,6 +30,7 @@ spring-boot-starter-jdbc-test = { module = "org.springframework.boot:spring-boot
 spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 spring-boot-jackson = {module = "org.springframework.boot:spring-boot-starter-jackson"}
+spring-boot-starter-json = { module = "org.springframework.boot:spring-boot-starter-json" }
 
 #spotless
 spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "com.diffplug.spotless.gradle.plugin", version.ref = "spotless" }
