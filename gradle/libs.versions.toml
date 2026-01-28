@@ -12,6 +12,7 @@ avroPlugin = "1.9.1"
 avroCore = "1.11.3"
 confluent = "7.5.0"
 springwolf = "1.20.0"
+kotlin-mockito = "6.2.3"
 
 [libraries]
 # Spring Boot Starters
@@ -31,6 +32,8 @@ spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 spring-boot-jackson = {module = "org.springframework.boot:spring-boot-starter-jackson"}
 spring-boot-starter-json = { module = "org.springframework.boot:spring-boot-starter-json" }
+
+kotlin-mockito = { module = "org.mockito.kotlin:mockito-kotlin", version.ref="kotlin-mockito"}
 
 #spotless
 spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "com.diffplug.spotless.gradle.plugin", version.ref = "spotless" }

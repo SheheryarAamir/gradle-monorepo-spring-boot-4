@@ -46,6 +46,7 @@ dependencies {
     //testImplementation(libs.findLibrary("spring-boot-starter-jdbc-test").get())
     testImplementation(libs.findLibrary("spring-starter-test").get())
     testImplementation(libs.findLibrary("spring-boot-kafka-test").get())
+    testImplementation(libs.findLibrary("kotlin-mockito").get())
 
 }
 
